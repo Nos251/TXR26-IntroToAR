@@ -337,3 +337,5 @@ MonoBehaviour:
   _renderer: {fileID: 4907341669316172822}
   _text: {fileID: 234670292654413804}
   _textContainer: {fileID: 1377298829509817680}
+  _lerp: 0.2
+  _rotationSpeed: 60
