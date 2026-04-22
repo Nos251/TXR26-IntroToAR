@@ -11,6 +11,8 @@ public class ChangeColorIfNearby : MonoBehaviour
     [SerializeField] private Transform _textContainer;
     
     private Camera _camera;
+    [SerializeField] private float _lerp;
+    [SerializeField] private float _rotationSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -28,16 +30,34 @@ public class ChangeColorIfNearby : MonoBehaviour
     void Update()
     {
         Vector3 direction = _text.transform.position - _camera.transform.position;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        
-        Vector3 distanceTestVector =  transform.position - _camera.transform.position;
-        
-        float distance =  distanceTestVector.magnitude;
+        direction = Vector3.ProjectOnPlane(direction, Vector3.up);
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        if (distance > _colorSwapThreshold) _renderer.material = _defaultMaterial;
+        /*Quaternion rotation = Quaternion.RotateTowards(_text.transform.rotation,
+            targetRotation, 
+            Time.deltaTime * _rotationSpeed);*
+        
+        
+        /*Quaternion rotation = Quaternion.Lerp(
+            _text.transform.rotation,
+            targetRotation,
+            _lerp*Time.deltaTime);*/
+        
+        //_text.transform.position += new Vector3(5,5,5);
+        _text.transform.rotation *= Quaternion.Euler(0,90*Time.deltaTime,0);
+
+
+        float sqrDistance =  direction.sqrMagnitude;
+
+        if (sqrDistance > Mathf.Pow(_colorSwapThreshold,2)) _renderer.material = _defaultMaterial;
         else _renderer.material = _nearbyMaterial;
-        _text.SetText(distance.ToString("F2"));
-        _text.transform.rotation = rotation;
+        
+        _text.SetText(Mathf.Sqrt(sqrDistance).ToString("F2")); 
         
     }
 }
+
+
+//Quaternion rotation = Quaternion.Lerp(_text.transform.rotation,  targetRotation, _lerp*Time.deltaTime);
+//Quaternion rotation = Quaternion.RotateTowards(_text.transform.rotation, targetRotation, _rotationSpeed);
+//
