@@ -36,7 +36,7 @@ namespace _Project.Scripts
 
             /*Quaternion rotation = Quaternion.RotateTowards(_text.transform.rotation,
             targetRotation, 
-            Time.deltaTime * _rotationSpeed);*
+            Time.deltaTime * _rotationSpeed);*/
         
         
         /*Quaternion rotation = Quaternion.Lerp(
