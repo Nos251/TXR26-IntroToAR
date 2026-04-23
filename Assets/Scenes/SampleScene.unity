@@ -1578,6 +1578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _offset: 0.1
+  _distanceTextPrefab: {fileID: 4424094554408283324, guid: 8861022c65a0df344800dfa5e9703f91, type: 3}
 --- !u!120 &436358037
 LineRenderer:
   serializedVersion: 3

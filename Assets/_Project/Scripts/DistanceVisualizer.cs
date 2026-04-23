@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Scripts;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
@@ -8,8 +9,11 @@ public class DistanceVisualizer : MonoBehaviour
     private ObjectSpawner _objectSpawner;
     private LineRenderer _lineRenderer;
     
+    
     private List<GameObject> _objectList;
     [SerializeField] private float _offset=.1f;
+    [SerializeField] private GameObject _distanceTextPrefab;
+    private List<DistanceTextElement> _textElementList;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -18,7 +22,7 @@ public class DistanceVisualizer : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
         
         _objectList = new List<GameObject>();
-        
+        _textElementList = new List<DistanceTextElement>();
     }
 
     private void OnEnable()
@@ -29,6 +33,16 @@ public class DistanceVisualizer : MonoBehaviour
     private void OnDisable()
     {
         _objectSpawner.objectSpawned -= OnObjectSpawn;
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject instance = Instantiate(_distanceTextPrefab, transform);
+            _textElementList.Add(instance.GetComponent<DistanceTextElement>());
+            instance.SetActive(false);
+        }
     }
 
     private void OnObjectSpawn(GameObject obj)
@@ -59,13 +73,30 @@ public class DistanceVisualizer : MonoBehaviour
             {
                 _lineRenderer.SetPosition(i, _objectList[i].transform.position+_offset*Vector3.up);
             }
+
+            foreach (var VARIABLE in _textElementList)
+            {
+                VARIABLE.gameObject.SetActive(false);
+            }
+
+            for (int i = 0; i < _objectList.Count-1; i++)
+            {
+                float distance = Vector3.Distance(_objectList[i].transform.position, _objectList[i+1].transform.position);
+                _textElementList[i].UpdateDistance(distance);
+                
+                Vector3 direction = (_objectList[i+1].transform.position- _objectList[i].transform.position).normalized;
+                var position = _objectList[i].transform.position + direction * (distance * .5f);
+                /*Vector3 position = Vector3.Lerp(
+                    _objectList[i].transform.position,
+                    _objectList[i+1].transform.position,.5f);*/
+                _textElementList[i].UpdatePosition(position+_offset*Vector3.up);
+                _textElementList[i].gameObject.SetActive(true);
+                
+            }
         }
         else
         {
             _lineRenderer.positionCount = 0;
         }
     }
-    
-    
-    
 }
