@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _Project.Scripts;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
@@ -64,10 +65,10 @@ public class DistanceVisualizer : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    { 
+        _lineRenderer.positionCount = _objectList.Count;
         if (_objectList.Count > 1)
         {
-            _lineRenderer.positionCount = _objectList.Count;
             //Tracer la ligne
             for (int i = 0; i < _objectList.Count; i++)
             {
@@ -84,19 +85,57 @@ public class DistanceVisualizer : MonoBehaviour
                 float distance = Vector3.Distance(_objectList[i].transform.position, _objectList[i+1].transform.position);
                 _textElementList[i].UpdateDistance(distance);
                 
-                Vector3 direction = (_objectList[i+1].transform.position- _objectList[i].transform.position).normalized;
-                var position = _objectList[i].transform.position + direction * (distance * .5f);
-                /*Vector3 position = Vector3.Lerp(
+                //Vector3 direction = (_objectList[i+1].transform.position- _objectList[i].transform.position).normalized;
+                //var position = _objectList[i].transform.position + direction * (distance * .5f);
+                Vector3 position = Vector3.Lerp(
                     _objectList[i].transform.position,
-                    _objectList[i+1].transform.position,.5f);*/
+                    _objectList[i+1].transform.position,.5f);
                 _textElementList[i].UpdatePosition(position+_offset*Vector3.up);
                 _textElementList[i].gameObject.SetActive(true);
                 
             }
         }
-        else
+        if (_objectList.Count == 4)
         {
-            _lineRenderer.positionCount = 0;
+            _lineRenderer.positionCount = 5;
+            _lineRenderer.SetPosition(4, _objectList[0].transform.position+_offset*Vector3.up);
+            
+            float distance = Vector3.Distance(_objectList[3].transform.position, _objectList[0].transform.position);
+            _textElementList[3].UpdateDistance(distance);
+            
+            Vector3 position = Vector3.Lerp(
+                _objectList[0].transform.position,
+                _objectList[3].transform.position,.5f);
+            _textElementList[3].UpdatePosition(position+_offset*Vector3.up);
+            _textElementList[3].gameObject.SetActive(true);
+
+            GameObject[] orderElements = ReorderPointsClockwise(_objectList);
+            for (var i = 0; i < orderElements.Length; i++)
+            {
+                orderElements[i].GetComponent<DistanceVisualizerElement>().UpdateText(i.ToString());
+            }
+
         }
+        
+    }
+/// <summary>
+/// Reorder my points clockwise. This is Fucking magical!
+/// </summary>
+/// <returns>
+///     return the ordered list
+/// </returns>
+    private GameObject[] ReorderPointsClockwise(List<GameObject> elements)
+    {
+        Vector3 meanPoint = new Vector3();
+        foreach (GameObject element in elements)
+        {
+            meanPoint+= element.transform.position;
+        }
+        meanPoint /= elements.Count;
+
+        var result = elements.OrderBy(obj => Mathf.Atan2(
+            obj.transform.position.x - meanPoint.x,
+            obj.transform.position.z - meanPoint.z));
+        return result.ToArray();
     }
 }
