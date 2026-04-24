@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: ReferenceImageLibrary
+  m_EditorClassIdentifier: Unity.XR.ARSubsystems::UnityEngine.XR.ARSubsystems.XRReferenceImageLibrary
+  m_GuidLow: 5748864781907263688
+  m_GuidHigh: 3372217832160954036
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 5154912775858670398
+      m_GuidHigh: 7252624008743637685
+    m_SerializedTextureGuid:
+      m_GuidLow: 16430241910255274575
+      m_GuidHigh: 3143750354108030859
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: unitylogowhiteonblack
+    m_Texture: {fileID: 2800000, guid: 5a804a4ff1f7e4038b1f1e6f4ad8a02b, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5550505458386350161
+      m_GuidHigh: 3621428491841062016
+    m_SerializedTextureGuid:
+      m_GuidLow: 2643004529649882887
+      m_GuidHigh: 10677130273123681019
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: one
+    m_Texture: {fileID: 0}
